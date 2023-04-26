@@ -1,0 +1,22 @@
+{
+  "name": "nodejs-q2q3-2023",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon .index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MykhailoSheliahov/nodejs-Q2Q3-2023.git"
+  },
+  "author": "Mykhailo Sheliahov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MykhailoSheliahov/nodejs-Q2Q3-2023/issues"
+  },
+  "homepage": "https://github.com/MykhailoSheliahov/nodejs-Q2Q3-2023#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
+}
