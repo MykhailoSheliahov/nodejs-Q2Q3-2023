@@ -3,7 +3,7 @@ import { Request, Response, NextFunction } from 'express';
 export const authUser = (req: Request, res: Response, next: NextFunction) => {
   const params = req.query;
   
-  if ((params.userId as string) === 'user2') {
+  if ((params.userId as string) === 'user1') {
     return next();
   }
 

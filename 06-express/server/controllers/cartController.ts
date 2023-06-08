@@ -4,10 +4,10 @@ import { dbController } from './../controllers/dbController';
 import { CartConnector } from '../connectors/cartConnector';
 
 export class CartController {
-  static getCart(req: Request, res: Response) {
+  static async getCart(req: Request, res: Response) {
     const params = req.query;
 
-    const userCart = dbController.getUserCart({
+    const userCart = await dbController.getUserCart({
       userId: params.userId as string,
     })
 
@@ -35,11 +35,11 @@ export class CartController {
     })
   };
 
-  static updateCart(req: Request, res: Response) {
+  static async updateCart(req: Request, res: Response) {
     const params = req.query;
     const { cartId, items } = req.body
 
-    const updatedCart = dbController.updateCart({
+    const updatedCart = await dbController.updateCart({
       userId: params.userId as string,
       data: items
     });
@@ -52,10 +52,10 @@ export class CartController {
     })
   };
 
-  static deleteCart(req: Request, res: Response) {
+  static async deleteCart(req: Request, res: Response) {
     const params = req.query;
 
-    dbController.deleteCart({
+    await dbController.deleteCart({
       userId: params.userId as string,
     });
 
@@ -66,10 +66,10 @@ export class CartController {
     });
   };
 
-  static createOrder(req: Request, res: Response) {
+  static async createOrder(req: Request, res: Response) {
     const params = req.query;
 
-    const userCart = dbController.getUserCart({
+    const userCart = await dbController.getUserCart({
       userId: params.userId as string,
     });
 

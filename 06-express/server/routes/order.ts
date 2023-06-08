@@ -5,4 +5,4 @@ import { authUser } from '../middlewares/authUser';
 
 export const orderRouter = express.Router();
 
-orderRouter.post('/profile/cart/checkout', authUser, CartController.createOrder)
+orderRouter.post('/checkout', authUser, CartController.createOrder)
