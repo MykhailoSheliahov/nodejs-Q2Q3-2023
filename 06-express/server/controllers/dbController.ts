@@ -1,75 +1,161 @@
-import { MongoClient } from 'mongodb';
+import { MongoClient, Db, ObjectId } from 'mongodb';
 
-import { ProductItem, Cart } from './../types';
+import { ProductItem, Cart, Product, Order } from './../types';
+import { dbConnector } from '../connectors/dbConnector';
 
-export class dbController {
-  static url = 'mongodb://localhost:27017/shop';
+class dbController {
   static dbName = 'shop';
-  static client = new MongoClient(dbController.url);
+  static url = `mongodb://localhost:27017/${dbController.dbName}`;
+  static db: Db;
+
+  constructor() {
+    dbController.connect();
+  }
 
   static async connect() {
     try {
-      await dbController.client.connect();
+      const client = new MongoClient(dbController.url);
+      await client.connect();
+      dbController.db = client.db(dbController.dbName);
+      const collections = await dbController.db.command({ listCollections: 1, filter: {}, nameOnly: true });
+
+      const [cart, order, product] = collections.cursor.firstBatch.map((v: Record<string, unknown>) => v.name).sort();
+
+      if (!cart) {
+        await dbController.db.createCollection('carts', { capped: false });
+      }
+
+      if (!order) {
+        await dbController.db.createCollection('orders', { capped: false });
+      }
+
+      if (!product) {
+        await dbController.db.createCollection('products', { capped: false })
+        const collection = dbController.db.collection<Product>('products');
+        collection.insertMany([
+          {
+            title: 'Orange',
+            description: 'Orange description',
+            price: 10
+          },
+          {
+            title: 'Banana',
+            description: 'Banana description',
+            price: 10
+          },
+          {
+            title: 'Apple',
+            description: 'Apple description',
+            price: 10
+          },
+          {
+            title: 'Potato',
+            description: 'Apple description',
+            price: 10
+          }
+        ]);
+      }
     } catch (e) {
       console.log('Throw error in DB connection', e);
       process.exit(1);
     }
   };
 
-  static async getCollection() {
-    await dbController.connect();
-    const db = dbController.client.db(dbController.dbName);
-    const collection = db.collection<Cart>('carts');
+  getCartCollection() {
+    const collection = dbController.db.collection<Cart>('carts');
     return collection;
   };
 
-  static async getUserCart({ userId }: {
+  getProductCollection() {
+    const collection = dbController.db.collection<Product>('products');
+    return collection;
+  };
+
+  getOrderCollection() {
+    const collection = dbController.db.collection<Order>('orders');
+    return collection;
+  };
+
+  async getUserCart({ userId }: {
     userId: string,
   }) {
-    const collection = await dbController.getCollection()
+    const collection = this.getCartCollection()
     const data = await collection.findOne<Cart>({ userId });
 
     if (!data || data?.deleted === true) {
-      collection.insertOne({ id: "2", userId, items: [] }) ;
-      const data = await collection.findOne<Cart>({ userId });
-      return data;
+      await collection.insertOne({ userId, deleted: false, items: [] });
+      const data = await collection.findOne<Cart>({ userId, deleted: false });
+      delete data?.deleted;
+      return data!;
     }
-
     delete data?.deleted;
-
     return data;
   };
 
-  static async updateCart({ userId, data }: {
+  async updateCart({ userId, data }: {
     userId: string,
     data: ProductItem[]
   }) {
-    const userCart = await dbController.getUserCart({ userId });
-
-    if (userCart) {
-      const collection = await dbController.getCollection()
-      await collection.updateOne({ userId }, { $push: { "items": { $each: data } } })
-      const userCart = await dbController.getUserCart({ userId });
-      return userCart;
-    }
-
-    return [];
+    const collection = this.getCartCollection()
+    await collection.updateOne({ userId }, { $push: { "items": { $each: data } } })
+    const userCart = await this.getUserCart({ userId });
+    return userCart;
   };
 
-  static async deleteCart({ userId }: { userId: string }) {
-    const collection = await dbController.getCollection()
+  async deleteCart({ userId }: { userId: string }) {
+    const collection = this.getCartCollection()
     await collection.updateOne({ userId }, { $set: { "deleted": true } })
   };
 
-  static async getProducts({ userId }: { userId: string }) {
-    const userCart = await dbController.getUserCart({ userId })
-    const products = userCart?.items.map(({ count, ...rest }) => rest.product);
-    return products;
+  async getProducts() {
+    const collection = this.getProductCollection();
+    const data = await collection.find({}).toArray();
+    return data;
   };
 
-  static async getProductById({ userId, productId }: { userId: string, productId: string }) {
-    const userCart = await dbController.getUserCart({ userId })
-    const products = userCart?.items.find(item => item.product.id === productId)?.product;
-    return products;
+  async getProductById({ productId }: { productId: string }) {
+    const collection = this.getProductCollection();
+    const objId = new ObjectId(productId);
+    const data = await collection.findOne<Product>({ _id: objId });
+    return data;
   };
+
+  async createOrder({ userId }: {
+    userId: string,
+  }) {
+    const collection = this.getOrderCollection()
+    const orderIsExist = await collection.findOne<Order>({ userId });
+
+    if (!orderIsExist) {
+      const userCart = await this.getUserCart({ userId });
+      delete userCart?.deleted;
+      const total = dbConnector.calcTotal(userCart);
+
+      const order: Order = {
+        ...userCart,
+        cartId: userCart._id,
+        payment: {
+          type: 'Contactless',
+          address: 'Home address',
+          creditCard: 'VISA>'
+        },
+        delivery: {
+          type: 'Car',
+          address: 'Lviv, str. 10'
+        },
+        comments: '',
+        status: 'Active',
+        total
+      };
+
+      collection.insertOne(order);
+      const data = await collection.findOne<Order>({ userId });
+      return data!;
+    };
+
+    const data = await collection.findOne<Order>({ userId });
+    return data!;
+  }
 }
+
+export default new dbController();
