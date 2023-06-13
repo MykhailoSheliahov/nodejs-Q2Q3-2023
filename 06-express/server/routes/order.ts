@@ -1,8 +1,8 @@
 import express from 'express';
 
-import { CartController } from '../controllers/cartController';
+import { OrderController } from '../controllers/orderController';
 import { authUser } from '../middlewares/authUser';
 
 export const orderRouter = express.Router();
 
-orderRouter.post('/profile/cart/checkout', authUser, CartController.createOrder)
+orderRouter.post('/checkout', authUser, OrderController.createOrder)
