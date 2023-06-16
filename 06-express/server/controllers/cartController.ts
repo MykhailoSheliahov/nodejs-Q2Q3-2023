@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 
-import dbController from './../controllers/dbController';
-
+import { dbController } from './../controllers/dbController';
 import { CartConnector } from '../connectors/cartConnector';
 import { OrderController } from './orderController';
 
@@ -14,8 +13,7 @@ export class CartController {
     })
 
     const total = CartConnector.calcTotal(userCart);
-    const cartWithoutUserId = CartConnector.hideUserIdProp(userCart);
-    const cart = CartConnector.swapIds(cartWithoutUserId);
+    const cart = CartConnector.hideUserProps(userCart);
 
     res.send({
       statusCode: 200,
@@ -35,10 +33,9 @@ export class CartController {
       userId: params.userId as string,
       data: items
     });
+    
     const total = CartConnector.calcTotal(userCart);
-
-    const cartWithoutUserId = CartConnector.hideUserIdProp(userCart);
-    const cart = CartConnector.swapIds(cartWithoutUserId);
+    const cart = CartConnector.hideUserProps(userCart);
 
     res.send({
       statusCode: 200,
@@ -59,7 +56,7 @@ export class CartController {
 
     res.send({
       'statusCode': 200,
-      'message': `Cart ${params.userId} successfully deleted`,
+      'message': `Cart for '${params.userId}' successfully deleted`,
     });
   };
 

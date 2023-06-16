@@ -1,18 +1,13 @@
 version: '3'
 services:
-  node:
+  postgres-db:
+    image: 'postgres:12'
+    container_name: 'node-gmp-db'
+    environment:
+      - POSTGRES_USER=node_gmp
+      - POSTGRES_PASSWORD=password123
+      - POSTGRES_DB=node_gmp
     restart: always
-    build: .
     ports:
-      - 80:3000
-    volumes:
-      - ./:/code
-  mongo:
-    image: mongo
-    ports:
-      - 27017:27017
-    volumes:
-      - mongodb:/data/db
-volumes:
- mongodb:
+      - '5432:5432'
   
