@@ -1,8 +1,9 @@
-import { Cart, Order } from './../types';
+import { Cart } from './../types';
 
 export class CartConnector {
-  static hideUserIdProp(cart: Cart) {
+  static hideUserProps(cart: Cart) {
     delete cart.userId;
+    delete cart.deleted;
     return cart;
   };
 
@@ -11,9 +12,4 @@ export class CartConnector {
     return total;
   };
 
-  static swapIds(cart: Cart) {
-    cart.id = cart._id;
-    delete cart._id;
-    return cart;
-  };
-}
+};

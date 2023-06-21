@@ -1,124 +1,68 @@
-import { MongoClient, Db, ObjectId } from 'mongodb';
-
+import { DI } from './../app';
 import { ProductItem, Cart, Product, Order } from './../types';
-import { CartMigrations } from '../migrations/cartMigrations';
-import { OrderMigrations } from '../migrations/orderMigrations';
-import { ProductMigrations } from '../migrations/productMigrations';
+import { CartSeeder } from '../seeders/cartSeeder';
+import { OrderSeeder } from '../seeders/orderSeeder ';
 
 export class dbController {
-  static dbName = 'shop';
-  static url = `mongodb://localhost:27017/${dbController.dbName}`;
-  static db: Db;
-
-  constructor() {
-    dbController.connect();
-  }
-
-  static async connect() {
-    try {
-      const client = new MongoClient(dbController.url);
-      await client.connect();
-      dbController.db = client.db(dbController.dbName);
-      const collections = await dbController.db.command({ listCollections: 1, filter: {}, nameOnly: true });
-
-      const [cart, order, product] = collections.cursor.firstBatch.map((v: Record<string, unknown>) => v.name).sort();
-
-      if (!cart) {
-        await CartMigrations.createCollection();
-      }
-
-      if (!order) {
-        await OrderMigrations.createCollection();
-      }
-
-      if (!product) {
-        await ProductMigrations.createCollection();
-        await ProductMigrations.populateDB();
-      }
-    } catch (e) {
-      console.log('Throw error in DB connection', e);
-      process.exit(1);
-    }
-  };
-
-  getCartCollection() {
-    const collection = dbController.db.collection<Cart>('carts');
-    return collection;
-  };
-
-  getProductCollection() {
-    const collection = dbController.db.collection<Product>('products');
-    return collection;
-  };
-
-  getOrderCollection() {
-    const collection = dbController.db.collection<Order>('orders');
-    return collection;
-  };
-
-  async getUserCart({ userId }: {
+  static async getUserCart({ userId }: {
     userId: string,
-  }) {
-    const collection = this.getCartCollection()
-    const data = await collection.findOne<Cart>({ userId });
+  }): Promise<Cart> {
+    const isUserCartExist = await DI.cartRepository.findOne({ userId, deleted: false });
 
-    if (!data || data?.deleted === true) {
-      await CartMigrations.populateDB(collection, userId);
+    if (!isUserCartExist || isUserCartExist.deleted) {
+      CartSeeder.populateDB(userId)
 
-      const data = await collection.findOne<Cart>({ userId, deleted: false });
-      delete data?.deleted;
-      return data!;
+      const cart = await DI.cartRepository.findOne({ userId, deleted: false });
+      return cart as unknown as Cart;
     }
-    delete data?.deleted;
-    return data;
+
+    return isUserCartExist as unknown as Cart;
   };
 
-  async updateCart({ userId, data }: {
+  static async updateCart({ userId, data }: {
     userId: string,
     data: ProductItem[]
-  }) {
-    const collection = this.getCartCollection()
-    await collection.updateOne({ userId }, { $push: { "items": { $each: data } } })
-    const userCart = await this.getUserCart({ userId });
-    return userCart;
+  }): Promise<Cart> {
+    const cart = await dbController.getUserCart({ userId });
+
+    cart.items = [...cart.items, ...data];
+    await DI.em.persistAndFlush(cart);
+
+    const refetchedCart = await dbController.getUserCart({ userId });
+    return refetchedCart;
   };
 
-  async deleteCart({ userId }: { userId: string }) {
-    const collection = this.getCartCollection()
-    await collection.updateOne({ userId }, { $set: { "deleted": true } })
+  static async deleteCart({ userId }: { userId: string }) {
+    const cart = await dbController.getUserCart({ userId });
+    cart.deleted = true;
+    await DI.em.persistAndFlush(cart);
   };
 
-  async getProducts() {
-    const collection = this.getProductCollection();
-    const data = await collection.find({}).toArray();
-    return data;
+  static async getProducts(): Promise<Product[]> {
+    return DI.productRepository.findAll() as unknown as Product[];
   };
 
-  async getProductById({ productId }: { productId: string }) {
-    const collection = this.getProductCollection();
-    const objId = new ObjectId(productId);
-    const data = await collection.findOne<Product>({ _id: objId });
-    return data;
+  static async getProductById({ productId }: { productId: string }) {
+    return DI.productRepository.findOne({ id: Number(productId) });
   };
 
-  async createOrder({ userId }: {
+  static async createOrder({ userId }: {
     userId: string,
   }) {
-    const collection = this.getOrderCollection()
-    const orderIsExist = await collection.findOne<Order>({ userId });
+    const cart = await dbController.getUserCart({ userId });
+    const order = await DI.orderRepository.findOne({ userId });
 
-    if (!orderIsExist) {
-      const userCart = await this.getUserCart({ userId });
+    if (!order) {
+      OrderSeeder.populateDB(userId, cart);
 
-      await OrderMigrations.populateDB(collection, userCart);
-
-      const data = await collection.findOne<Order>({ userId });
-      return data!;
+      const refetchedOrder = await DI.orderRepository.findOne({ userId });
+      return refetchedOrder as unknown as Order;
     };
 
-    const data = await collection.findOne<Order>({ userId });
-    return data!;
+    order.items = cart.items;
+    await DI.em.persistAndFlush(order);
+
+    const refetchedOrder = await DI.orderRepository.findOne({ userId });
+    return refetchedOrder as unknown as Order;
   }
 }
-
-export default new dbController();

@@ -1,13 +1,20 @@
 {
   "compilerOptions": {
-    "target": "es5",                          
-    "module": "commonjs",                    
+    "target": "es2020",                         
+    "module": "commonjs",    
+    "moduleResolution": "node",                
     "lib": ["es6"],                    
     "outDir": "dist",                          
     "rootDir": "./server",
-    "strict": true,         
+    "strict": true,       
     "noImplicitAny": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
-  }
+    "declaration": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+  },
+  "discovery": { "disableDynamicFileAccess": false },
+  "include": ["./server"],
+  "exclude": ["node_modules"]
 }

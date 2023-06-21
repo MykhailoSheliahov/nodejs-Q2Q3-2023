@@ -1,5 +1,6 @@
 # dependencies
 *node_modules
+*migrations
 
 *package-lock.json
 *.log

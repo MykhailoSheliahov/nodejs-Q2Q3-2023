@@ -1,8 +1,5 @@
-import { ObjectId } from 'mongodb';
-
 export interface Product {
-  id?: string,
-  _id?: ObjectId,
+  id: string,
   title: string,
   description: string,
   price: number,
@@ -14,28 +11,30 @@ export interface ProductItem {
 }
 
 export interface Cart {
-  id?: string,
-  _id?: string,
+  id: string,
   userId?: string,
   items: ProductItem[],
   deleted?: boolean;
 }
 
+export interface Delivery {
+  type: string,
+  address: string
+}
+
+export interface Payment {
+  type: string,
+  address: string,
+  creditCard: string
+}
+
 export interface Order {
-  _id?: string,
-  id?: string,
-  userId?: string,
-  cartId?: string,
+  id: string,
+  userId: string,
+  cartId: string,
   items: ProductItem[],
-  payment: {
-    type: string,
-    address: string,
-    creditCard: string
-  },
-  delivery: {
-    type: string,
-    address: string
-  },
+  payment: Payment,
+  delivery: Delivery,
   comments: string,
   status: string,
   total: number
