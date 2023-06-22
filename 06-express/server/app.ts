@@ -9,11 +9,16 @@ import { PostgreSqlDriver } from "@mikro-orm/postgresql";
 import { Cart } from './entities/Cart';
 import { Order } from './entities/Order';
 import { Product } from './entities/Product';
+import { User } from './entities/User';
 import { indexRouter } from './routes/index';
 import { cartRouter } from './routes/cart';
 import { productRouter } from './routes/product';
 import { orderRouter } from './routes/order';
+import { registerRouter } from './routes/register';
+import { loginRouter } from './routes/login';
 import config from './config/orm.config'
+import { verifyToken } from './middlewares/verifyToken';
+import { isCartOwner } from './middlewares/isCartOwner';
 
 dotenv.config({ path: path.join(__dirname, './../../', '.env') });
 
@@ -28,6 +33,7 @@ export const DI = {} as {
   cartRepository: EntityRepository<Cart>,
   productRepository: EntityRepository<Product>,
   orderRepository: EntityRepository<Order>,
+  userRepository: EntityRepository<User>
 };
 
 export const init = (async () => {
@@ -46,13 +52,16 @@ export const init = (async () => {
   DI.productRepository = DI.orm.em.getRepository(Product);
   DI.cartRepository = DI.orm.em.getRepository(Cart);
   DI.orderRepository = DI.orm.em.getRepository(Order);
+  DI.userRepository = DI.orm.em.getRepository(User);
 
   app.use(express.json());
   app.use((_req, _res, next) => RequestContext.create(DI.orm.em, next));
   app.use('/', indexRouter);
-  app.use('/cart', cartRouter);
+  app.use('/register', verifyToken, registerRouter);
+  app.use('/login', loginRouter);
+  app.use('/cart', verifyToken, isCartOwner, cartRouter);
   app.use('/product', productRouter);
-  app.use('/order', orderRouter);
+  app.use('/order', verifyToken, isCartOwner, orderRouter);
   app.use((_req, res) => res.status(404).json({ message: 'No route found' }));
 
   DI.server = app.listen(port, () => {

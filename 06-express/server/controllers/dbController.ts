@@ -1,11 +1,12 @@
 import { DI } from './../app';
-import { ProductItem, Cart, Product, Order } from './../types';
+import { ProductItem, Cart, Product, Order, User } from './../types';
 import { CartSeeder } from '../seeders/cartSeeder';
 import { OrderSeeder } from '../seeders/orderSeeder ';
+import { UserSeeder } from '../seeders/userSeeder';
 
 export class dbController {
   static async getUserCart({ userId }: {
-    userId: string,
+    userId: number,
   }): Promise<Cart> {
     const isUserCartExist = await DI.cartRepository.findOne({ userId, deleted: false });
 
@@ -20,7 +21,7 @@ export class dbController {
   };
 
   static async updateCart({ userId, data }: {
-    userId: string,
+    userId: number,
     data: ProductItem[]
   }): Promise<Cart> {
     const cart = await dbController.getUserCart({ userId });
@@ -32,7 +33,7 @@ export class dbController {
     return refetchedCart;
   };
 
-  static async deleteCart({ userId }: { userId: string }) {
+  static async deleteCart({ userId }: { userId: number }) {
     const cart = await dbController.getUserCart({ userId });
     cart.deleted = true;
     await DI.em.persistAndFlush(cart);
@@ -47,7 +48,7 @@ export class dbController {
   };
 
   static async createOrder({ userId }: {
-    userId: string,
+    userId: number,
   }) {
     const cart = await dbController.getUserCart({ userId });
     const order = await DI.orderRepository.findOne({ userId });
@@ -64,5 +65,19 @@ export class dbController {
 
     const refetchedOrder = await DI.orderRepository.findOne({ userId });
     return refetchedOrder as unknown as Order;
+  };
+
+  static async getUser({ email }: { email: string }): Promise<User | null> {
+    const order = await DI.userRepository.findOne({ email });
+
+    if (!order) {
+      return null;
+    }
+
+    return order as unknown as User;
+  };
+
+  static createUser(params: User) {
+    UserSeeder.populateDB(params);
   }
 }

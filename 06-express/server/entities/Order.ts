@@ -1,4 +1,4 @@
-import { Entity, PrimaryKey, Property, ManyToOne } from '@mikro-orm/core';
+import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
 
 import { ProductItem, Payment, Delivery } from './../types';
 
@@ -8,10 +8,10 @@ export class Order {
   id!: number;
 
   @Property()
-  userId: string;
+  userId: number;
 
   @Property({ type: 'text' })
-  cartId: string;
+  cartId: number;
 
   @Property({ type: 'json', nullable: true })
   items: ProductItem[];
@@ -31,7 +31,7 @@ export class Order {
   @Property({ type: 'number' })
   total: number;
 
-  constructor(userId: string, cartId: string, items: ProductItem[], payment: Payment, delivery: Delivery, comments: string, status: string, total: number) {
+  constructor(userId: number, cartId: number, items: ProductItem[], payment: Payment, delivery: Delivery, comments: string, status: string, total: number) {
     this.userId = userId;
     this.cartId = cartId;
     this.items = items;

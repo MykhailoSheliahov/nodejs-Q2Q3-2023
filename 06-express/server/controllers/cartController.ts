@@ -3,13 +3,14 @@ import { Request, Response } from 'express';
 import { dbController } from './../controllers/dbController';
 import { CartConnector } from '../connectors/cartConnector';
 import { OrderController } from './orderController';
+import { User } from '../types';
 
 export class CartController {
   static async getCart(req: Request, res: Response) {
-    const params = req.query;
+    const { id } = req.query.user as unknown as User;
 
     const userCart = await dbController.getUserCart({
-      userId: params.userId as string,
+      userId: id!,
     })
 
     const total = CartConnector.calcTotal(userCart);
@@ -26,11 +27,11 @@ export class CartController {
   };
 
   static async updateCart(req: Request, res: Response) {
-    const params = req.query;
+    const { id } = req.query.user as unknown as User;
     const { items } = req.body
 
     const userCart = await dbController.updateCart({
-      userId: params.userId as string,
+      userId: id!,
       data: items
     });
     
@@ -48,15 +49,15 @@ export class CartController {
   };
 
   static async deleteCart(req: Request, res: Response) {
-    const params = req.query;
+    const { id } = req.query.user as unknown as User;
 
     await dbController.deleteCart({
-      userId: params.userId as string,
+      userId: id!,
     });
 
     res.send({
       'statusCode': 200,
-      'message': `Cart for '${params.userId}' successfully deleted`,
+      'message': `Cart for '${id}' successfully deleted`,
     });
   };
 

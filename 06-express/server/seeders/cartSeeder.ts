@@ -5,7 +5,7 @@ import { DI } from '../app'
 import { Cart } from '../entities/Cart';
 
 export class CartSeeder {
-  static populateDB(userId: string) {
+  static populateDB(userId: number) {
     DI.cartRepository.create({
       userId,
       deleted: false,
@@ -15,13 +15,12 @@ export class CartSeeder {
 
   static async seed(em: EntityManager) {
     em.create(Cart, {
-      // order: 1,
-      userId: 'user1',
+      userId: 1,
       deleted: false,
       items: [
         {
           product: {
-            id: uuidv4(),
+            id: Number(uuidv4()),
             title: 'Orange',
             description: 'Orange description',
             price: 10,
@@ -30,7 +29,7 @@ export class CartSeeder {
         },
         {
           product: {
-            id: uuidv4(),
+            id: Number(uuidv4()),
             title: 'Banana',
             description: 'Banana description',
             price: 10,
@@ -41,13 +40,12 @@ export class CartSeeder {
     }, { persist: true });
 
     em.create(Cart, {
-      // order: 2,
-      userId: 'user2',
+      userId: 2,
       deleted: false,
       items: [
         {
           product: {
-            id: uuidv4(),
+            id: Number(uuidv4()),
             title: 'Apple',
             description: 'Apple description',
             price: 15,
@@ -56,7 +54,7 @@ export class CartSeeder {
         },
         {
           product: {
-            id: uuidv4(),
+            id: Number(uuidv4()),
             title: 'Lemon',
             description: 'Lemon description',
             price: 10,
@@ -67,13 +65,12 @@ export class CartSeeder {
     }, { persist: true });
 
     em.create(Cart, {
-      // order: 3,
-      userId: 'user3',
+      userId: 3,
       deleted: true,
       items: [
         {
           product: {
-            id: uuidv4(),
+            id: Number(uuidv4()),
             title: 'Apple',
             description: 'Apple description',
             price: 15,
@@ -82,7 +79,7 @@ export class CartSeeder {
         },
         {
           product: {
-            id: uuidv4(),
+            id: Number(uuidv4()),
             title: 'Lemon',
             description: 'Lemon description',
             price: 10,
@@ -92,5 +89,4 @@ export class CartSeeder {
       ]
     }, { persist: true });
   }
-
 }

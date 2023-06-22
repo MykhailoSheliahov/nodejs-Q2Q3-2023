@@ -1,5 +1,5 @@
 export interface Product {
-  id: string,
+  id: number,
   title: string,
   description: string,
   price: number,
@@ -11,8 +11,8 @@ export interface ProductItem {
 }
 
 export interface Cart {
-  id: string,
-  userId?: string,
+  id: number,
+  userId?: number,
   items: ProductItem[],
   deleted?: boolean;
 }
@@ -29,13 +29,22 @@ export interface Payment {
 }
 
 export interface Order {
-  id: string,
-  userId: string,
-  cartId: string,
+  id: number,
+  userId: number,
+  cartId: number,
   items: ProductItem[],
   payment: Payment,
   delivery: Delivery,
   comments: string,
   status: string,
   total: number
+}
+
+export interface User {
+  id?: number,
+  first_name: string,
+  last_name: string,
+  email: string,
+  password: string,
+  role: string,
 }
