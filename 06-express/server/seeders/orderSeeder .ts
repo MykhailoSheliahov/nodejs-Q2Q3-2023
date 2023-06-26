@@ -6,7 +6,7 @@ import { Cart } from './../types';
 import { DI } from '../app';
 
 export class OrderSeeder {
-  static async populateDB(userId: string, data: Cart) {
+  static async populateDB(userId: number, data: Cart) {
     DI.orderRepository.create({
       userId,
       cartId: data.id,
@@ -28,13 +28,12 @@ export class OrderSeeder {
 
   static async seed(em: EntityManager) {
     em.create(Order, {
-      // cart: 1,
-      userId: 'user1',
-      cartId: '1',
+      userId: 1,
+      cartId: 1,
       items: [
         {
           product: {
-            id: uuidv4(),
+            id: Number(uuidv4()),
             title: 'Orange',
             description: 'Orange description',
             price: 10,
@@ -43,7 +42,7 @@ export class OrderSeeder {
         },
         {
           product: {
-            id: uuidv4(),
+            id: Number(uuidv4()),
             title: 'Banana',
             description: 'Banana description',
             price: 10,
@@ -68,13 +67,12 @@ export class OrderSeeder {
     }, { persist: true });
 
     em.create(Order, {
-      // cart: 1,
-      userId: 'user2',
-      cartId: '2',
+      userId: 2,
+      cartId: 2,
       items: [
         {
           product: {
-            id: uuidv4(),
+            id: Number(uuidv4()),
             title: 'Apple',
             description: 'Apple description',
             price: 15,
@@ -83,7 +81,7 @@ export class OrderSeeder {
         },
         {
           product: {
-            id: uuidv4(),
+            id: Number(uuidv4()),
             title: 'Lemon',
             description: 'Lemon description',
             price: 10,

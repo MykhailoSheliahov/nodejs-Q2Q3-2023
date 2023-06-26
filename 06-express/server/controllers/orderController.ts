@@ -2,13 +2,14 @@ import { Request, Response } from 'express';
 
 import { dbController } from './../controllers/dbController';
 import { OrderConnector } from '../connectors/orderConnector';
+import { User } from '../types';
 
 export class OrderController {
   static async createOrder(req: Request, res: Response) {
-    const params = req.query;
+    const { id } = req.query.user as unknown as User;
 
     const order = await dbController.createOrder({
-      userId: params.userId as string,
+      userId: id!,
     });
 
     const total = OrderConnector.calcTotal(order)

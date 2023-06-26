@@ -6,6 +6,7 @@ import { PostgreSqlDriver } from '@mikro-orm/postgresql';
 import { Product } from '../entities/Product';
 import { Cart } from '../entities/Cart';
 import { Order } from '../entities/Order';
+import { User } from '../entities/User';
 
 dotenv.config({ path: path.join(__dirname, './../../../', '.env') });
 
@@ -16,8 +17,8 @@ const options: Options<PostgreSqlDriver> = {
   host: process.env.MIKRO_ORM_HOST, //'localhost',
   dbName: process.env.MIKRO_ORM_DB_NAME, //'node_gmp',
   populateAfterFlush: true,
-  entities: [Product, Cart, Order], // path to your JS entities (dist), relative to `baseDir`
-  entitiesTs: [Product, Cart, Order], // path to our TS entities (src), relative to `baseDir`
+  entities: [Product, Cart, Order, User], // path to your JS entities (dist), relative to `baseDir`
+  entitiesTs: [Product, Cart, Order, User], // path to our TS entities (src), relative to `baseDir`
   migrations: {
     path: './dist/migrations', // path to the folder with migrations
     pathTs: './server/migrations', // path to the folder with TS migrations (if used, we should put path to compiled files in `path`)

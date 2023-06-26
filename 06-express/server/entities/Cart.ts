@@ -8,7 +8,7 @@ export class Cart {
   id!: number;
 
   @Property()
-  userId: string;
+  userId: number;
 
   @Property()
   deleted: boolean;
@@ -16,7 +16,7 @@ export class Cart {
   @Property({ type: 'json', nullable: true })
   items: ProductItem[];
 
-  constructor(userId: string, deleted: boolean, items: ProductItem[]) {
+  constructor(userId: number, deleted: boolean, items: ProductItem[]) {
     this.userId = userId;
     this.deleted = deleted;
     this.items = items;
