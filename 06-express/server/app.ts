@@ -6,6 +6,7 @@ import pg from 'pg';
 import * as dotenv from 'dotenv';
 import { EntityManager, EntityRepository, MikroORM, RequestContext } from '@mikro-orm/core';
 import { PostgreSqlDriver } from "@mikro-orm/postgresql";
+import { debug } from 'debug';
 
 import { Cart } from './entities/Cart';
 import { Order } from './entities/Order';
@@ -23,7 +24,10 @@ import { isCartOwner } from './middlewares/isCartOwner';
 
 dotenv.config({ path: path.join(__dirname, './../../', '.env') });
 
+const debuglog = debug('app');
+
 const port = process.env.SERVER_PORT || 3000;
+debuglog('port' + port);
 
 const app = express();
 
@@ -46,7 +50,12 @@ export const init = (async () => {
     database: process.env.MIKRO_ORM_DB_NAME,
   })
 
-  await client.connect();
+  try {
+    await client.connect();
+    debuglog('DB is connected');
+  } catch (err) {
+    debuglog('DB connection error', err);
+  }
 
   DI.orm = await MikroORM.init<PostgreSqlDriver>(config);
   DI.em = DI.orm.em;
@@ -65,6 +74,8 @@ export const init = (async () => {
   app.use('/order', verifyToken, isCartOwner, orderRouter);
   app.get('/health', (_req, res) => {
     client.on('error', (error) => {
+      debuglog('router - /health has error' + error);
+
       res.send({
         statusCode: 500,
         message: 'Error connecting to database',
@@ -78,6 +89,7 @@ export const init = (async () => {
     });
 
     client.end();
+    debuglog('router - /health works');
   });
   app.use((_req, res) => res.status(404).json({ message: 'No route found' }));
 
