@@ -1,12 +1,11 @@
-import { NextFunction, Request, Response } from 'express';
-import { logger } from '../logging';
+import { NextFunction, Request, Response } from 'express'
+import { logger } from '../logging'
 
-const getDurationInMilliseconds = (start: bigint) =>
-  Number(process.hrtime.bigint() - start) / 1e6;
+const getDurationInMilliseconds = (start: bigint) => Number(process.hrtime.bigint() - start) / 1e6
 
 export const logRequest = (req: Request, res: Response, next: NextFunction) => {
-  logger.info(`${req.method} ${req.originalUrl} [STARTED]`);
-  const start = process.hrtime.bigint();
+  logger.info(`${req.method} ${req.originalUrl} [STARTED]`)
+  const start = process.hrtime.bigint()
 
   res.on('finish', () => {
     logger.info({
@@ -15,7 +14,7 @@ export const logRequest = (req: Request, res: Response, next: NextFunction) => {
       status: '[FINISHED]',
       durations: `${getDurationInMilliseconds(start)} ms`,
     })
-  });
+  })
 
   res.on('error', (err) => {
     logger.info({
@@ -23,8 +22,8 @@ export const logRequest = (req: Request, res: Response, next: NextFunction) => {
       url: req.originalUrl,
       status: '[Error]',
       err,
-    });
-  });
+    })
+  })
 
-  next();
-};
+  next()
+}

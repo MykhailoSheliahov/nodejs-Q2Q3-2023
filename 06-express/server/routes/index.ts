@@ -1,7 +1,7 @@
-import express from 'express';
+import express from 'express'
 
-export const indexRouter = express.Router();
+export const indexRouter = express.Router()
 
 indexRouter.get('/', (_req, res) => {
   res.send('home')
-});
+})

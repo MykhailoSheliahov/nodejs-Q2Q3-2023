@@ -1,14 +1,14 @@
 import * as dotenv from 'dotenv'
-import path from 'path';
-import { Options } from '@mikro-orm/core';
-import { PostgreSqlDriver } from '@mikro-orm/postgresql';
+import path from 'path'
+import { Options } from '@mikro-orm/core'
+import { PostgreSqlDriver } from '@mikro-orm/postgresql'
 
-import { Product } from '../entities/Product';
-import { Cart } from '../entities/Cart';
-import { Order } from '../entities/Order';
-import { User } from '../entities/User';
+import { Product } from '../entities/Product'
+import { Cart } from '../entities/Cart'
+import { Order } from '../entities/Order'
+import { User } from '../entities/User'
 
-dotenv.config({ path: path.join(__dirname, './../../../', '.env') });
+dotenv.config({ path: path.join(__dirname, './../../../', '.env') })
 
 const options: Options<PostgreSqlDriver> = {
   type: 'postgresql',
@@ -31,6 +31,6 @@ const options: Options<PostgreSqlDriver> = {
     emit: 'ts', // seeder generation mode
     fileName: (className: string) => className, // seeder file naming convention
   },
-};
+}
 
-export default options;
+export default options
