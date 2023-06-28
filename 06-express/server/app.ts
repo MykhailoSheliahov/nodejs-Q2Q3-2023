@@ -84,4 +84,42 @@ export const init = (async () => {
   DI.server = app.listen(port, () => {
     console.log(`MikroORM express TS example started at http://localhost:${port}`);
   });
+
+  // Graceful shutdown
+  let connections: Socket[] = [];
+
+  DI.server.on('connection', (connection) => {
+    // register connections
+    connections.push(connection);
+
+    // remove/filter closed connections
+    connection.on('close', () => {
+      connections = connections.filter((currentConnection) => currentConnection !== connection);
+    });
+  });
+
+  const shutdown = () => {
+    console.log('Received kill signal, shutting down gracefully');
+
+    DI.server.close(() => {
+      console.log('Closed out remaining connections');
+      process.exit(0);
+    });
+
+    setTimeout(() => {
+      console.error('Could not close connections in time, forcefully shutting down');
+      process.exit(1);
+    }, 20000);
+
+    // end current connections
+    connections.forEach((connection) => connection.end());
+
+    // then destroy connections
+    setTimeout(() => {
+      connections.forEach((connection) => connection.destroy());
+    }, 10000);
+  };
+
+  process.on('SIGTERM', shutdown);
+  process.on('SIGINT', shutdown);
 })();
