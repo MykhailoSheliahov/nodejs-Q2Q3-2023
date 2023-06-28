@@ -22,6 +22,7 @@ import config from './config/orm.config'
 import { verifyToken } from './middlewares/verifyToken'
 import { isCartOwner } from './middlewares/isCartOwner'
 import { logRequest } from './middlewares/logRequest'
+import { DatabaseSeeder } from './seeders/seeder'
 
 dotenv.config({ path: path.join(__dirname, './../../', '.env') })
 
@@ -59,6 +60,10 @@ export const init = (async () => {
   }
 
   DI.orm = await MikroORM.init<PostgreSqlDriver>(config)
+  const seeder = DI.orm.getSeeder()
+  await DI.orm.getSchemaGenerator().refreshDatabase()
+  await seeder.seed(DatabaseSeeder)
+
   DI.em = DI.orm.em
   DI.productRepository = DI.orm.em.getRepository(Product)
   DI.cartRepository = DI.orm.em.getRepository(Cart)

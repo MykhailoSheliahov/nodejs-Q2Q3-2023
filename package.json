@@ -5,7 +5,7 @@
   "main": "index.ts",
   "scripts": {
     "server": "set DEBUG=app,verifyToken,routes:login,routes:register & ts-node ./06-express/server/app.ts",
-    "client": "node ./06-express/server/index.js",
+    "client": "ts-node ./06-express/server/index.ts",
     "dev": "nodemon ./index.ts",
     "task1": "nodemon ./03-eventEmmiter-buffer-stream/task1.js",
     "task2": "nodemon ./03-eventEmmiter-buffer-stream/task2.js",
@@ -15,7 +15,8 @@
     "prepare": "husky install",
     "precommit": "sh ./.husky/commit-msg.sh",
     "lint": "eslint --fix . --ext .ts",
-    "audit": "npm audit"
+    "audit": "npm audit",
+    "seed": "cd ./06-express && npx mikro-orm migration:create --initial && npx mikro-orm migration:up &&  npx mikro-orm seeder:run"
   },
   "repository": {
     "type": "git",
