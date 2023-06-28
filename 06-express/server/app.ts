@@ -1,3 +1,4 @@
+import { Socket } from 'net';
 import express from 'express';
 import http from 'http';
 import path from 'path';
@@ -22,7 +23,7 @@ import { isCartOwner } from './middlewares/isCartOwner';
 
 dotenv.config({ path: path.join(__dirname, './../../', '.env') });
 
-const port = process.env.PORT || 3000;
+const port = process.env.SERVER_PORT || 3000;
 
 const app = express();
 
@@ -39,7 +40,7 @@ export const DI = {} as {
 export const init = (async () => {
   const client = new pg.Client({
     host: process.env.MIKRO_ORM_HOST,
-    port: 5432,
+    port: Number(process.env.DB_PORT) || 5432,
     user: process.env.MIKRO_ORM_USER,
     password: process.env.MIKRO_ORM_PASSWORD,
     database: process.env.MIKRO_ORM_DB_NAME,
