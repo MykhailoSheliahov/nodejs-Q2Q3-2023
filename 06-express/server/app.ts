@@ -21,6 +21,7 @@ import { loginRouter } from './routes/login';
 import config from './config/orm.config'
 import { verifyToken } from './middlewares/verifyToken';
 import { isCartOwner } from './middlewares/isCartOwner';
+import { logRequest } from './middlewares/logRequest';
 
 dotenv.config({ path: path.join(__dirname, './../../', '.env') });
 
@@ -64,7 +65,7 @@ export const init = (async () => {
   DI.orderRepository = DI.orm.em.getRepository(Order);
   DI.userRepository = DI.orm.em.getRepository(User);
 
-  app.use(express.json());
+  app.use(express.json(), logRequest);
   app.use((_req, _res, next) => RequestContext.create(DI.orm.em, next));
   app.use('/', indexRouter);
   app.use('/register', verifyToken, registerRouter);
