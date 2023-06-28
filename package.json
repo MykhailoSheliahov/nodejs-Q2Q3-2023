@@ -14,7 +14,8 @@
     "test:coverage": "jest --coverage",
     "prepare": "husky install",
     "precommit": "sh ./.husky/commit-msg.sh",
-    "lint": "eslint --fix . --ext .ts"
+    "lint": "eslint --fix . --ext .ts",
+    "audit": "npm audit"
   },
   "repository": {
     "type": "git",
