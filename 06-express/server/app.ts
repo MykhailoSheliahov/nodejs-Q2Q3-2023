@@ -63,6 +63,22 @@ export const init = (async () => {
   app.use('/cart', verifyToken, isCartOwner, cartRouter);
   app.use('/product', productRouter);
   app.use('/order', verifyToken, isCartOwner, orderRouter);
+  app.get('/health', (_req, res) => {
+    client.on('error', (error) => {
+      res.send({
+        statusCode: 500,
+        message: 'Error connecting to database',
+        error
+      });
+    });
+
+    res.send({
+      statusCode: 200,
+      message: 'Ok',
+    });
+
+    client.end();
+  });
   app.use((_req, res) => res.status(404).json({ message: 'No route found' }));
 
   DI.server = app.listen(port, () => {
