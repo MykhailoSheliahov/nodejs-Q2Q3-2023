@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.ts",
   "scripts": {
-    "server": "set DEBUG=app,verifyToken,routes:login,routes:register & ts-node ./06-express/server/app.ts",
+    "server": "set DEBUG=app,verifyToken,routes:login,routes:register && ts-node ./06-express/server/app.ts",
     "client": "ts-node ./06-express/server/index.ts",
     "dev": "nodemon ./index.ts",
     "task1": "nodemon ./03-eventEmmiter-buffer-stream/task1.js",

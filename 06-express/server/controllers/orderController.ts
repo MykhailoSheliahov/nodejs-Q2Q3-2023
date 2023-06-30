@@ -1,18 +1,18 @@
-import { Request, Response } from 'express'
+import { Request, Response } from 'express';
 
-import { dbController } from './../controllers/dbController'
-import { OrderConnector } from '../connectors/orderConnector'
-import { User } from '../types'
+import { dbController } from './../controllers/dbController';
+import { OrderConnector } from '../connectors/orderConnector';
+import { User } from '../types';
 
 export class OrderController {
   static async createOrder(req: Request, res: Response) {
-    const { id } = req.query.user as unknown as User
+    const { id } = req.query.user as unknown as User;
 
     const order = await dbController.createOrder({
       userId: id!,
-    })
+    });
 
-    const total = OrderConnector.calcTotal(order)
+    const total = OrderConnector.calcTotal(order);
 
     res.send({
       api: 'post profile/cart/checkout',
@@ -24,6 +24,6 @@ export class OrderController {
           total,
         },
       },
-    })
+    });
   }
 }

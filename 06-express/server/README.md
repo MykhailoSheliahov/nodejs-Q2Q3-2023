@@ -1,6 +1,8 @@
 # Run docker container
 
     docker-compose up -d --build
+    docker compose -f docker-compose.yml up --build
+    curl --request GET --url http://localhost:3000/health
 
 # Remove docker container
 

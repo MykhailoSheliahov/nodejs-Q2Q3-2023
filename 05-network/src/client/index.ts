@@ -1,13 +1,12 @@
-import { userService } from './services/userService'
-
-;(async () => {
+import { userService } from './services/userService';
+(async () => {
   try {
     //1
     const data = await userService.createUser({
       name: 'Oleh',
       email: 'Oleh@google.com',
       hobbies: ['chess', 'pool'],
-    })
+    });
     // const data = await userService.createUser({
     //    name: "",
     //    email: '',
@@ -45,10 +44,10 @@ import { userService } from './services/userService'
 
     // const data = await userService.getUserHobbies(1);
 
-    console.log('🚀 ~ file: index.ts:5 ~ data:', data)
+    console.log('🚀 ~ file: index.ts:5 ~ data:', data);
   } catch (e: any) {
-    console.log('statusCode', e?.response.status)
-    console.log('statusText', e?.response.statusText)
-    console.log('message', e?.response.headers.message)
+    console.log('statusCode', e?.response.status);
+    console.log('statusText', e?.response.statusText);
+    console.log('message', e?.response.headers.message);
   }
-})()
+})();

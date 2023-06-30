@@ -1,24 +1,24 @@
-import { Entity, PrimaryKey, Property } from '@mikro-orm/core'
+import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
 
-import { ProductItem } from './../types'
+import { ProductItem } from './../types';
 
 @Entity()
 export class Cart {
   @PrimaryKey()
-  id!: number
+  id!: number;
 
   @Property()
-  userId: number
+  userId: number;
 
   @Property()
-  deleted: boolean
+  deleted: boolean;
 
   @Property({ type: 'json', nullable: true })
-  items: ProductItem[]
+  items: ProductItem[];
 
   constructor(userId: number, deleted: boolean, items: ProductItem[]) {
-    this.userId = userId
-    this.deleted = deleted
-    this.items = items
+    this.userId = userId;
+    this.deleted = deleted;
+    this.items = items;
   }
 }

@@ -1,21 +1,21 @@
-import * as dotenv from 'dotenv'
-import path from 'path'
-import { Options } from '@mikro-orm/core'
-import { PostgreSqlDriver } from '@mikro-orm/postgresql'
+import * as dotenv from 'dotenv';
+import path from 'path';
+import { Options } from '@mikro-orm/core';
+import { PostgreSqlDriver } from '@mikro-orm/postgresql';
 
-import { Product } from '../entities/Product'
-import { Cart } from '../entities/Cart'
-import { Order } from '../entities/Order'
-import { User } from '../entities/User'
+import { Product } from '../entities/Product';
+import { Cart } from '../entities/Cart';
+import { Order } from '../entities/Order';
+import { User } from '../entities/User';
 
-dotenv.config({ path: path.join(__dirname, './../../../', '.env') })
+dotenv.config({ path: path.join(__dirname, './../../../', '.env') });
 
 const options: Options<PostgreSqlDriver> = {
   type: 'postgresql',
-  user: process.env.MIKRO_ORM_USER, //'node_gmp',
-  password: process.env.MIKRO_ORM_PASSWORD, //'password123',
-  host: process.env.MIKRO_ORM_HOST, //'localhost',
-  dbName: process.env.MIKRO_ORM_DB_NAME, //'node_gmp',
+  user: process.env.POSTGRES_USER,
+  password: process.env.POSTGRES_PASSWORD,
+  host: process.env.POSTGRES_HOST,
+  dbName: process.env.POSTGRES_DB,
   populateAfterFlush: true,
   entities: [Product, Cart, Order, User], // path to your JS entities (dist), relative to `baseDir`
   entitiesTs: [Product, Cart, Order, User], // path to our TS entities (src), relative to `baseDir`
@@ -31,6 +31,6 @@ const options: Options<PostgreSqlDriver> = {
     emit: 'ts', // seeder generation mode
     fileName: (className: string) => className, // seeder file naming convention
   },
-}
+};
 
-export default options
+export default options;

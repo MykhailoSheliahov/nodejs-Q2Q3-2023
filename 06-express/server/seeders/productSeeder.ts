@@ -1,6 +1,6 @@
-import { EntityManager } from '@mikro-orm/postgresql'
+import { EntityManager } from '@mikro-orm/postgresql';
 
-import { Product } from '../entities/Product'
+import { Product } from '../entities/Product';
 
 export class ProductSeeder {
   static async seed(em: EntityManager) {
@@ -12,7 +12,7 @@ export class ProductSeeder {
         price: 10,
       },
       { persist: true },
-    )
+    );
 
     em.create(
       Product,
@@ -22,7 +22,7 @@ export class ProductSeeder {
         price: 10,
       },
       { persist: true },
-    )
+    );
 
     em.create(
       Product,
@@ -32,7 +32,7 @@ export class ProductSeeder {
         price: 15,
       },
       { persist: true },
-    )
+    );
 
     em.create(
       Product,
@@ -42,6 +42,6 @@ export class ProductSeeder {
         price: 10,
       },
       { persist: true },
-    )
+    );
   }
 }

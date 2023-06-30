@@ -1,21 +1,21 @@
-import axios from 'axios'
-import path from 'path'
-import dotenv from 'dotenv'
+import axios from 'axios';
+import path from 'path';
+import dotenv from 'dotenv';
 // import { fileURLToPath } from 'url';
 
 // const __filename = fileURLToPath(import.meta.url);
 // const __dirname = path.dirname(__filename)
 
-dotenv.config({ path: path.join(__dirname, './../../', '.env') })
+dotenv.config({ path: path.join(__dirname, './../../', '.env') });
 
-const API_URL_CART = 'http://localhost:3000/cart'
-const API_URL_PRODUCT = 'http://localhost:3000/product'
-const API_URL_ORDER = 'http://localhost:3000/order'
-const API_URL_REGISTER = 'http://localhost:3000/register'
-const API_URL_LOGIN = 'http://localhost:3000/login'
-const AuthStr = 'Bearer ' + process.env.TOKEN_KEY
+const API_URL_CART = 'http://localhost:3000/cart';
+const API_URL_PRODUCT = 'http://localhost:3000/product';
+const API_URL_ORDER = 'http://localhost:3000/order';
+const API_URL_REGISTER = 'http://localhost:3000/register';
+const API_URL_LOGIN = 'http://localhost:3000/login';
+const AuthStr = 'Bearer ' + process.env.TOKEN_KEY;
 
-;(async () => {
+(async () => {
   // const putCart = await axios.put(
   //   `${API_URL_CART}`,
   //   {
@@ -107,9 +107,9 @@ const AuthStr = 'Bearer ' + process.env.TOKEN_KEY
       email: 'saraconor@gmail.com',
       password: 'saraconor',
     },
-  })
+  });
 
-  console.log('🚀 ~ file: index.js:4 ~ json:', postCart.data.token)
+  console.log('🚀 ~ file: index.js:4 ~ json:', postCart.data.token);
 
   //  const putCart = await axios.put(
   //   `${API_URL_CART}`,
@@ -142,6 +142,6 @@ const AuthStr = 'Bearer ' + process.env.TOKEN_KEY
     // params: {
     //   userId: process.env.CURRENT_USER,
     // },
-  })
-  console.log('🚀 ~ file: index.js:4 ~ json:', getCart2.data)
-})()
+  });
+  console.log('🚀 ~ file: index.js:4 ~ json:', getCart2.data);
+})();

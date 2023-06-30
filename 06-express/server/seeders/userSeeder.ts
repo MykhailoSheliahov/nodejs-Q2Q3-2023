@@ -1,12 +1,12 @@
-import { EntityManager } from '@mikro-orm/postgresql'
+import { EntityManager } from '@mikro-orm/postgresql';
 
-import { DI } from '../app'
-import { User as userType } from '../types'
-import { User } from '../entities/User'
+import { DI } from '../app';
+import { User as userType } from '../types';
+import { User } from '../entities/User';
 
 export class UserSeeder {
   static populateDB(data: userType) {
-    DI.userRepository.create({ ...data })
+    DI.userRepository.create({ ...data });
   }
 
   static async seed(em: EntityManager) {
@@ -20,7 +20,7 @@ export class UserSeeder {
         role: 'owner',
       },
       { persist: true },
-    )
+    );
 
     em.create(
       User,
@@ -32,7 +32,7 @@ export class UserSeeder {
         role: 'owner',
       },
       { persist: true },
-    )
+    );
 
     em.create(
       User,
@@ -44,6 +44,6 @@ export class UserSeeder {
         role: 'reader',
       },
       { persist: true },
-    )
+    );
   }
 }

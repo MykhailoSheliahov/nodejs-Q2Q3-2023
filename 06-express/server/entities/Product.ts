@@ -1,22 +1,22 @@
-import { Entity, PrimaryKey, Property } from '@mikro-orm/core'
+import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
 
 @Entity()
 export class Product {
   @PrimaryKey()
-  id!: number
+  id!: number;
 
   @Property()
-  title: string
+  title: string;
 
   @Property()
-  description: string
+  description: string;
 
   @Property()
-  price: number
+  price: number;
 
   constructor(title: string, description: string, price: number) {
-    this.title = title
-    this.description = description
-    this.price = price
+    this.title = title;
+    this.description = description;
+    this.price = price;
   }
 }

@@ -1,4 +1,4 @@
-import { Order } from '../types'
+import { Order } from '../types';
 
 export class OrderConnector {
   static calcTotal(order: Order) {
@@ -7,7 +7,7 @@ export class OrderConnector {
         ? order.items
             .map((item) => item.product.price * item.count)
             .reduce((item, acc) => item + acc, 0)
-        : 0
-    return total
+        : 0;
+    return total;
   }
 }

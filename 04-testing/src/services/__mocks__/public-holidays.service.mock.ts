@@ -1,4 +1,4 @@
-import { PublicHolidayShort } from './../../types'
+import { PublicHolidayShort } from './../../types';
 
 export const listOfPublicHolidaysForGBMock: PublicHolidayShort[] = [
   {
@@ -81,7 +81,7 @@ export const listOfPublicHolidaysForGBMock: PublicHolidayShort[] = [
     localName: 'Boxing Day',
     name: "St. Stephen's Day",
   },
-]
+];
 export const listOfPublicHolidaysForFRMock: PublicHolidayShort[] = [
   {
     date: '2023-01-01',
@@ -138,7 +138,7 @@ export const listOfPublicHolidaysForFRMock: PublicHolidayShort[] = [
     localName: 'Noël',
     name: 'Christmas Day',
   },
-]
+];
 export const listOfPublicHolidaysForDEMock: PublicHolidayShort[] = [
   {
     date: '2023-01-01',
@@ -235,7 +235,7 @@ export const listOfPublicHolidaysForDEMock: PublicHolidayShort[] = [
     localName: 'Zweiter Weihnachtstag',
     name: "St. Stephen's Day",
   },
-]
+];
 export const listOfPublicHolidaysForNLMock: PublicHolidayShort[] = [
   {
     date: '2023-01-01',
@@ -292,7 +292,7 @@ export const listOfPublicHolidaysForNLMock: PublicHolidayShort[] = [
     localName: 'Tweede Kerstdag',
     name: "St. Stephen's Day",
   },
-]
+];
 
 export const listOfNextPublicHolidaysForGBMock: PublicHolidayShort[] = [
   {
@@ -360,7 +360,7 @@ export const listOfNextPublicHolidaysForGBMock: PublicHolidayShort[] = [
     localName: 'Early May Bank Holiday',
     name: 'Early May Bank Holiday',
   },
-]
+];
 export const listOfNextPublicHolidaysForFRMock: PublicHolidayShort[] = [
   {
     name: 'Whit Monday',
@@ -409,7 +409,7 @@ export const listOfNextPublicHolidaysForFRMock: PublicHolidayShort[] = [
     date: '2024-05-08',
   },
   { name: 'Ascension Day', localName: 'Ascension', date: '2024-05-09' },
-]
+];
 export const listOfNextPublicHolidaysForDEMock: PublicHolidayShort[] = [
   {
     name: 'Pentecost',
@@ -503,7 +503,7 @@ export const listOfNextPublicHolidaysForDEMock: PublicHolidayShort[] = [
     localName: 'Pfingstsonntag',
     date: '2024-05-19',
   },
-]
+];
 export const listOfNextPublicHolidaysForNLMock: PublicHolidayShort[] = [
   {
     name: 'Pentecost',
@@ -552,4 +552,4 @@ export const listOfNextPublicHolidaysForNLMock: PublicHolidayShort[] = [
     localName: 'Eerste Pinksterdag',
     date: '2024-05-19',
   },
-]
+];

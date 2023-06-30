@@ -19,7 +19,7 @@ export const countryInfoMock = {
   countryCode: 'AD',
   officialName: 'Principality of Andorra',
   region: 'Europe',
-}
+};
 
 export const countryLongWeekendsMock = [
   {
@@ -82,4 +82,4 @@ export const countryLongWeekendsMock = [
     dayCount: 4,
     needBridgeDay: false,
   },
-]
+];

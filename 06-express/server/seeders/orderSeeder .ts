@@ -1,9 +1,9 @@
-import { v4 as uuidv4 } from 'uuid'
-import { EntityManager } from '@mikro-orm/postgresql'
+import { v4 as uuidv4 } from 'uuid';
+import { EntityManager } from '@mikro-orm/postgresql';
 
-import { Order } from '../entities/Order'
-import { Cart } from './../types'
-import { DI } from '../app'
+import { Order } from '../entities/Order';
+import { Cart } from './../types';
+import { DI } from '../app';
 
 export class OrderSeeder {
   static async populateDB(userId: number, data: Cart) {
@@ -23,7 +23,7 @@ export class OrderSeeder {
       comments: '',
       status: 'Pending',
       total: 0,
-    })
+    });
   }
 
   static async seed(em: EntityManager) {
@@ -66,7 +66,7 @@ export class OrderSeeder {
         total: 1000,
       },
       { persist: true },
-    )
+    );
 
     em.create(
       Order,
@@ -107,6 +107,6 @@ export class OrderSeeder {
         total: 500,
       },
       { persist: true },
-    )
+    );
   }
 }
