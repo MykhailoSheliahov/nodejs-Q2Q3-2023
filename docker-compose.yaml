@@ -2,20 +2,28 @@ version: '3'
 services:
   app:
     container_name: my_app
+    image: 'my_app:latest'
     build:
       context: .
       dockerfile: Dockerfile
     restart: always
     ports:
       - '3000:3000'
-  postgres-db:
-    image: 'postgres:12'
+    depends_on:
+      - postgres
+    networks:
+      - my_network
+  postgres:
     container_name: 'postgres'
+    image: 'postgres:latest'
     environment:
       - POSTGRES_USER=node_gmp
       - POSTGRES_PASSWORD=password123
       - POSTGRES_DB=node_gmp
     restart: always
+    networks:
+      - my_network
     ports:
       - '5432:5432'
-  
+networks:
+  my_network:
