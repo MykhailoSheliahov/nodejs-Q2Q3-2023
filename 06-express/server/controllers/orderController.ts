@@ -12,7 +12,7 @@ export class OrderController {
       userId: id!,
     });
 
-    const total = OrderConnector.calcTotal(order)
+    const total = OrderConnector.calcTotal(order);
 
     res.send({
       api: 'post profile/cart/checkout',
@@ -21,9 +21,9 @@ export class OrderController {
       data: {
         order: {
           ...order,
-          total
-        }
-      }
-    })
-  };
-};
+          total,
+        },
+      },
+    });
+  }
+}

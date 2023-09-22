@@ -11,7 +11,7 @@ export class CartController {
 
     const userCart = await dbController.getUserCart({
       userId: id!,
-    })
+    });
 
     const total = CartConnector.calcTotal(userCart);
     const cart = CartConnector.hideUserProps(userCart);
@@ -21,32 +21,33 @@ export class CartController {
       message: 'Success',
       data: {
         cart,
-        total
-      }
-    })
-  };
+        total,
+      },
+    });
+  }
 
   static async updateCart(req: Request, res: Response) {
     const { id } = req.query.user as unknown as User;
-    const { items } = req.body
+    const { items } = req.body;
 
     const userCart = await dbController.updateCart({
       userId: id!,
-      data: items
+      data: items,
     });
-    
+
     const total = CartConnector.calcTotal(userCart);
     const cart = CartConnector.hideUserProps(userCart);
 
     res.send({
       statusCode: 200,
       message: 'Success',
+
       data: {
         cart,
-        total
-      }
-    })
-  };
+        total,
+      },
+    });
+  }
 
   static async deleteCart(req: Request, res: Response) {
     const { id } = req.query.user as unknown as User;
@@ -56,12 +57,12 @@ export class CartController {
     });
 
     res.send({
-      'statusCode': 200,
-      'message': `Cart for '${id}' successfully deleted`,
+      statusCode: 200,
+      message: `Cart for '${id}' successfully deleted`,
     });
-  };
+  }
 
   static async createOrder(req: Request, res: Response) {
     await OrderController.createOrder(req, res);
-  };
-};
+  }
+}

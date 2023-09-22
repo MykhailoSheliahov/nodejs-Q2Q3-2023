@@ -20,5 +20,5 @@ export class Cart {
     this.userId = userId;
     this.deleted = deleted;
     this.items = items;
-  };
-};
+  }
+}

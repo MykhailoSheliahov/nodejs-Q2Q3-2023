@@ -1,14 +1,10 @@
-const axios = require('axios');
+import axios from 'axios';
 
 const API_URL = 'http://localhost:3000';
 
 export const userService = {
   //1
-  async createUser(params: {
-    name: string,
-    email: string,
-    hobbies: string[],
-  }) {
+  async createUser(params: { name: string; email: string; hobbies: string[] }) {
     const { data } = await axios.post(`${API_URL}/user/create`, params);
     return data;
   },
@@ -19,11 +15,14 @@ export const userService = {
   },
 
   //2
-  async updateUser({ id, ...params }: {
-    id: number,
-    name?: string,
-    email?: string,
-    hobbies?: string[]
+  async updateUser({
+    id,
+    ...params
+  }: {
+    id: number;
+    name?: string;
+    email?: string;
+    hobbies?: string[];
   }) {
     const data = await axios.put(`${API_URL}/user/${id}/update`, params);
     return data.data;
@@ -40,24 +39,12 @@ export const userService = {
   },
 
   //4
-  async addUserHobby({
-    id,
-    hobby
-  }: {
-    id: number,
-    hobby: string
-  }) {
+  async addUserHobby({ id, hobby }: { id: number; hobby: string }) {
     const { data } = await axios.put(`${API_URL}/user/${id}/hobbies/add`, { hobby });
     return data;
   },
-  async deleteUserHobby({
-    id,
-    hobby
-  }: {
-    id: number,
-    hobby: string
-  }) {
-    const { data } = await axios.put(`${API_URL}/user/${id}/hobbies/delete`, {hobby});
+  async deleteUserHobby({ id, hobby }: { id: number; hobby: string }) {
+    const { data } = await axios.put(`${API_URL}/user/${id}/hobbies/delete`, { hobby });
     return data;
   },
 
@@ -66,4 +53,4 @@ export const userService = {
     const { data } = await axios.get(`${API_URL}/user/${id}/hobbies`);
     return data;
   },
-}
+};

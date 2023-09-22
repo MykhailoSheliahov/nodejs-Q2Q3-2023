@@ -31,7 +31,16 @@ export class Order {
   @Property({ type: 'number' })
   total: number;
 
-  constructor(userId: number, cartId: number, items: ProductItem[], payment: Payment, delivery: Delivery, comments: string, status: string, total: number) {
+  constructor(
+    userId: number,
+    cartId: number,
+    items: ProductItem[],
+    payment: Payment,
+    delivery: Delivery,
+    comments: string,
+    status: string,
+    total: number,
+  ) {
     this.userId = userId;
     this.cartId = cartId;
     this.items = items;
@@ -40,5 +49,5 @@ export class Order {
     this.comments = comments;
     this.status = status;
     this.total = total;
-  };
-};
+  }
+}

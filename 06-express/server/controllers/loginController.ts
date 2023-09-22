@@ -1,7 +1,10 @@
 import { Request, Response } from 'express';
 import path from 'path';
 import * as jwt from 'jsonwebtoken';
-import * as dotenv from 'dotenv'
+import * as dotenv from 'dotenv';
+import { debug } from 'debug';
+
+const debuglog = debug('routes:login');
 
 import { dbController } from './dbController';
 
@@ -13,40 +16,40 @@ export class LoginController {
       const { email, password } = req.body.params;
 
       if (!(email && password)) {
+        debuglog('Email and password are required');
+
         return res.send({
           statusCode: 400,
-          message: 'All input is required'
+          message: 'All input is required',
         });
       }
 
       const user = await dbController.getUser({ email });
+      debuglog('Is user exist', user);
 
       if (!user) {
         return res.send({
           statusCode: 400,
-          message: 'Invalid Credentials'
+          message: 'Invalid Credentials',
         });
       }
 
-      const token = jwt.sign(
-        { ...user },
-        process.env.TOKEN_KEY!,
-        {
-          expiresIn: '2h',
-        }
-      );
+      const token = jwt.sign({ ...user }, process.env.TOKEN_KEY!, {
+        expiresIn: '2h',
+      });
+      debuglog('Token created:', token);
 
       return res.send({
         statusCode: 200,
-        token
+        token,
       });
-
     } catch (err) {
-      console.error(err);
+      debuglog('Error ocurred:', err);
+
       res.send({
         statusCode: 500,
-        message: 'Internal Server Error'
+        message: 'Internal Server Error',
       });
     }
-  };
-};
+  }
+}
