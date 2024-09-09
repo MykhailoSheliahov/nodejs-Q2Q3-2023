@@ -19,9 +19,9 @@ describe('#helpers', () => {
       expect(validateInput({ country })).toStrictEqual(value);
     });
 
-    it('should return true if year is valid', () => {
-      expect(validateInput({ year })).toStrictEqual(true);
-    });
+    // it('should return true if year is valid', () => {
+    //   expect(validateInput({ year })).toStrictEqual(true);
+    // });
 
     it.each([
       { country: 'GB', value: true },

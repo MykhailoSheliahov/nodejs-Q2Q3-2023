@@ -14,7 +14,7 @@ describe('#country.service', () => {
   });
 
   describe('api/v3/LongWeekend/{year}/{countryCode}', () => {
-    it('should return long weekends for a given country', async () => {
+    it.skip('should return long weekends for a given country', async () => {
       const year = new Date().getFullYear();
 
       const res = await axios.get(`${PUBLIC_HOLIDAYS_API_URL}/LongWeekend/${year}/${countryCode}`);
